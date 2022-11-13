@@ -3,7 +3,8 @@
 set -x
 set -e
 
-brew update && brew install ncurses s3cmd
+# Script assumes the presence of the following:
+# ncurses s3cmd wget
 
 ZIGDIR="$(pwd)"
 ARCH="x86_64"
