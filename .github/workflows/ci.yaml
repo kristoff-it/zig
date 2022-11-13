@@ -7,11 +7,7 @@ on:
       - master
 jobs:
   macos:
-    strategy:
-      matrix:
-        arch: [x86_64]
-      fail-fast: false
-    runs-on: macos-latest
+    runs-on: [self-hosted, macOS, ARM64]
     env: 
       BUILD_REASON: "PullRequest"
     steps:
