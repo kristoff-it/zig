@@ -7,7 +7,6 @@ set -e
 # ncurses s3cmd wget
 
 ZIGDIR="$(pwd)"
-ARCH="x86_64"
 TARGET="$ARCH-macos-none"
 MCPU="baseline"
 CACHE_BASENAME="zig+llvm+lld+clang-$TARGET-0.10.0-dev.4560+828735ac0"
