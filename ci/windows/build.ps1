@@ -1,0 +1,52 @@
+$ZIG_LLVM_CLANG_LLD_NAME = 'zig+llvm+lld+clang-$($Env:ARCH)-0.11.0-dev.25+499dddb4c'
+$ZIG_LLVM_CLANG_LLD_URL = 'https://ziglang.org/deps/$(ZIG_LLVM_CLANG_LLD_NAME).zip'
+
+ 
+Invoke-WebRequest -Uri "$(ZIG_LLVM_CLANG_LLD_URL)" -OutFile "$(ZIG_LLVM_CLANG_LLD_NAME).zip"
+Add-Type -AssemblyName System.IO.Compression.FileSystem ; 
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/actions-runner-win-x64-2.298.2.zip", "$PWD")
+
+Set-Variable -Name ZIGLIBDIR -Value "$(Get-Location)\lib"
+Set-Variable -Name ZIGINSTALLDIR -Value "$(Get-Location)\stage3-release"
+Set-Variable -Name ZIGPREFIXPATH -Value "$(Get-Location)\$(ZIG_LLVM_CLANG_LLD_NAME)"
+      
+function CheckLastExitCode {
+    if (!$?) {
+        exit 1
+    }
+    return 0
+}
+
+# Make the `zig version` number consistent.
+# This will affect the `zig build` command below which uses `git describe`.
+git config core.abbrev 9
+git fetch --tags
+
+if ((git rev-parse --is-shallow-repository) -eq "true") {
+    git fetch --unshallow # `git describe` won't work on a shallow repo
+}
+& "$ZIGPREFIXPATH\bin\zig.exe" build `
+    --prefix "$ZIGINSTALLDIR" `
+    --search-prefix "$ZIGPREFIXPATH" `
+    --zig-lib-dir "$ZIGLIBDIR" `
+    -Denable-stage1 `
+    -Dstatic-llvm `
+    -Drelease `
+    -Dstrip `
+    -Duse-zig-libcxx `
+    -Dtarget=$(TARGET)
+CheckLastExitCode
+
+& "$ZIGINSTALLDIR\bin\zig.exe" build test docs `
+    --search-prefix "$ZIGPREFIXPATH" `
+    -Dstatic-llvm `
+    -Dskip-non-native
+CheckLastExitCode
+
+# Produce the experimental std lib documentation.
+mkdir "$ZIGINSTALLDIR\doc\std" -force
+
+& "$ZIGINSTALLDIR\bin\zig.exe" test "$ZIGLIBDIR\std\std.zig" `
+    --zig-lib-dir "$ZIGLIBDIR" `
+    -femit-docs="$ZIGINSTALLDIR\doc\std" `
+    -fno-emit-bin
