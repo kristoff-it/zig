@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Run macOS Build Script
-        run: ./ci/azure/macos_script
+        run: ./ci/macos/script
 
       - run: |
           zig version
