@@ -36,7 +36,7 @@ if ((git rev-parse --is-shallow-repository) -eq "true") {
     -Drelease `
     -Dstrip `
     -Duse-zig-libcxx `
-    -Dtarget=$($TARGET)
+    -Dtarget="$TARGET"
 CheckLastExitCode
 
 & "$ZIGINSTALLDIR\bin\zig.exe" build test docs `
