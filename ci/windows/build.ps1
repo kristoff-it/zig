@@ -1,4 +1,5 @@
-$ZIG_LLVM_CLANG_LLD_NAME = "zig+llvm+lld+clang-$($Env:ARCH)-0.11.0-dev.25+499dddb4c"
+$TARGET = "$($Env:ARCH)-windows-gnu"
+$ZIG_LLVM_CLANG_LLD_NAME = "zig+llvm+lld+clang-$TARGET-0.11.0-dev.25+499dddb4c"
 $ZIG_LLVM_CLANG_LLD_URL = "https://ziglang.org/deps/$ZIG_LLVM_CLANG_LLD_NAME.zip"
 
 Write-Output "$ZIG_LLVM_CLANG_LLD_URL"
