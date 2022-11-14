@@ -1,7 +1,8 @@
 $ZIG_LLVM_CLANG_LLD_NAME = "zig+llvm+lld+clang-$($Env:ARCH)-0.11.0-dev.25+499dddb4c"
 $ZIG_LLVM_CLANG_LLD_URL = "https://ziglang.org/deps/$ZIG_LLVM_CLANG_LLD_NAME.zip"
 
- 
+Write-Output "$ZIG_LLVM_CLANG_LLD_URL"
+
 Invoke-WebRequest -Uri "$ZIG_LLVM_CLANG_LLD_URL" -OutFile "$ZIG_LLVM_CLANG_LLD_NAME.zip"
 Add-Type -AssemblyName System.IO.Compression.FileSystem ; 
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/actions-runner-win-x64-2.298.2.zip", "$PWD")
