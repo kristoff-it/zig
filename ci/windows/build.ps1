@@ -1,5 +1,5 @@
-$ZIG_LLVM_CLANG_LLD_NAME = 'zig+llvm+lld+clang-$($Env:ARCH)-0.11.0-dev.25+499dddb4c'
-$ZIG_LLVM_CLANG_LLD_URL = 'https://ziglang.org/deps/$(ZIG_LLVM_CLANG_LLD_NAME).zip'
+$ZIG_LLVM_CLANG_LLD_NAME = "zig+llvm+lld+clang-$($Env:ARCH)-0.11.0-dev.25+499dddb4c"
+$ZIG_LLVM_CLANG_LLD_URL = "https://ziglang.org/deps/$ZIG_LLVM_CLANG_LLD_NAME.zip"
 
  
 Invoke-WebRequest -Uri "$ZIG_LLVM_CLANG_LLD_URL" -OutFile "$ZIG_LLVM_CLANG_LLD_NAME.zip"
