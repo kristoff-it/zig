@@ -6,7 +6,7 @@ Write-Output "$ZIG_LLVM_CLANG_LLD_URL"
 
 Invoke-WebRequest -Uri "$ZIG_LLVM_CLANG_LLD_URL" -OutFile "$ZIG_LLVM_CLANG_LLD_NAME.zip"
 Add-Type -AssemblyName System.IO.Compression.FileSystem ; 
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/actions-runner-win-x64-2.298.2.zip", "$PWD")
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/$ZIG_LLVM_CLANG_LLD_NAME.zip", "$PWD")
 
 Set-Variable -Name ZIGLIBDIR -Value "$(Get-Location)\lib"
 Set-Variable -Name ZIGINSTALLDIR -Value "$(Get-Location)\stage3-release"
