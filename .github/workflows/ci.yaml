@@ -6,20 +6,26 @@ on:
     branches:
       - master
 jobs:
+  linux:
+    runs-on: [self-hosted, Linux, x64]
+    env: 
+      ARCH: "x86_64"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Run Build Script
+        run: ./ci/linux/build.sh
   macos:
     runs-on: [self-hosted, macOS, ARM64]
     env: 
-      BUILD_REASON: "PullRequest"
       ARCH: "aarch64"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       
       # - name: Run Build Script
-      #   run: ./ci/macos/script
-
-      - run: |
-          zig version
+      #   run: ./ci/macos/build.sh
   windows:
     runs-on: [self-hosted, Windows, x64]
     env: 
@@ -28,5 +34,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       
-      - name: Run Build Script
-        run: ./ci/windows/build.ps1
+      # - name: Run Build Script
+      #   run: ./ci/windows/build.ps1

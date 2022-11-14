@@ -2,9 +2,12 @@ $TARGET = "$($Env:ARCH)-windows-gnu"
 $ZIG_LLVM_CLANG_LLD_NAME = "zig+llvm+lld+clang-$TARGET-0.11.0-dev.25+499dddb4c"
 $ZIG_LLVM_CLANG_LLD_URL = "https://ziglang.org/deps/$ZIG_LLVM_CLANG_LLD_NAME.zip"
 
-Write-Output "$ZIG_LLVM_CLANG_LLD_URL"
+Write-Output "Downloading $ZIG_LLVM_CLANG_LLD_URL"
 
 Invoke-WebRequest -Uri "$ZIG_LLVM_CLANG_LLD_URL" -OutFile "$ZIG_LLVM_CLANG_LLD_NAME.zip"
+
+Write-Output "Extracting..."
+
 Add-Type -AssemblyName System.IO.Compression.FileSystem ; 
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/$ZIG_LLVM_CLANG_LLD_NAME.zip", "$PWD")
 
@@ -27,6 +30,9 @@ git fetch --tags
 if ((git rev-parse --is-shallow-repository) -eq "true") {
     git fetch --unshallow # `git describe` won't work on a shallow repo
 }
+
+Write-Output "Building Zig..."
+
 & "$ZIGPREFIXPATH\bin\zig.exe" build `
     --prefix "$ZIGINSTALLDIR" `
     --search-prefix "$ZIGPREFIXPATH" `
@@ -39,6 +45,8 @@ if ((git rev-parse --is-shallow-repository) -eq "true") {
     -Dtarget="$TARGET"
 CheckLastExitCode
 
+Write-Output " zig build test docs..."
+
 & "$ZIGINSTALLDIR\bin\zig.exe" build test docs `
     --search-prefix "$ZIGPREFIXPATH" `
     -Dstatic-llvm `
@@ -47,6 +55,8 @@ CheckLastExitCode
 
 # Produce the experimental std lib documentation.
 mkdir "$ZIGINSTALLDIR\doc\std" -force
+
+Write-Output "zig test std/std.zig..."
 
 & "$ZIGINSTALLDIR\bin\zig.exe" test "$ZIGLIBDIR\std\std.zig" `
     --zig-lib-dir "$ZIGLIBDIR" `
